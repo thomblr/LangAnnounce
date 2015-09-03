@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Main extends JavaPlugin implements Listener {
 
     private static Main instance;
-    private ChatHandler chanHandler;
+    private ChatHandler chatHandler;
 
     @Override
     public void onEnable() {
@@ -18,7 +18,7 @@ public class Main extends JavaPlugin implements Listener {
         getDataFolder().mkdir();
 
         try {
-            chanHandler = new ChatHandler().buildMessages();
+            chatHandler = new ChatHandler().buildMessages();
         } catch(JDOMException | IOException e) {
             e.printStackTrace();
         }
@@ -35,8 +35,8 @@ public class Main extends JavaPlugin implements Listener {
         return instance;
     }
 
-    public ChatHandler getChanHandler() {
-        return chanHandler;
+    public ChatHandler getChatHandler() {
+        return chatHandler;
     }
 
 }

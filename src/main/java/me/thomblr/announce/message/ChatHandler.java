@@ -16,10 +16,11 @@ import java.util.Set;
 public class ChatHandler {
 
     private final Set<Document> documents;
-    private final Set<ChatLang> langs = Sets.newHashSet();
+    private final Set<ChatLang> langs;
 
     public ChatHandler() throws JDOMException, IOException {
         this.documents = Sets.newHashSet();
+        this.langs = Sets.newHashSet();
         SAXBuilder builder = new SAXBuilder();
 
         File messages = new File(Main.get().getDataFolder(), "messages");
