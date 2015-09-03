@@ -1,4 +1,4 @@
-package me.maestro.announce.util;
+package me.thomblr.announce.util;
 
 public class Log {
 
@@ -9,8 +9,10 @@ public class Log {
         DEBUG
     }
 
+    public static String PREFIX = "[LangAnnounce]";
+
     public static void log(Level level, String message) {
-        System.out.println("[" + level.name() + "] " + message);
+        System.out.println(PREFIX + " [" + level.name() + "] " + message);
     }
 
     public static void info(String message) {
