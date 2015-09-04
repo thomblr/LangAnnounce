@@ -32,11 +32,11 @@ public class ChatThread extends Thread {
         }
     }
 
-    public String buildMessage(String message) {
+    public BaseComponent buildMessage(String message) {
         BaseComponent prefix = new TextComponent(ChatUtil.convertChatColor(Main.get().getAnnouncerPrefix()));
         prefix.addExtra(" ");
         prefix.addExtra(new TextComponent(ChatUtil.convertChatColor(message)));
-        return message;
+        return prefix;
     }
 
 }

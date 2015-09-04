@@ -57,15 +57,6 @@ public class ChatHandler {
         return this;
     }
 
-    public Document getMessagesDoc(String locale) {
-        for (Document doc : documents) {
-            if (locale.equals(doc.getRootElement().getAttributeValue("lang"))) {
-                return doc;
-            }
-        }
-        return null;
-    }
-
     public Set<ChatLang> getLangs() {
         return langs;
     }
