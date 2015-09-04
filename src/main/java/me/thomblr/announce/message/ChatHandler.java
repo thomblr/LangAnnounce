@@ -3,6 +3,7 @@ package me.thomblr.announce.message;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import me.thomblr.announce.Main;
+import me.thomblr.announce.util.Log;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -48,8 +49,11 @@ public class ChatHandler {
                     messages.add(child.getText());
                 }
             }
-            langs.add(new ChatLang(locale, messages));
+            ChatLang lang = new ChatLang(locale, messages);
+            langs.add(lang);
+            Log.info("Added " + lang.getLocale() + " with " + lang.getMessages().size() + " messages.");
         }
+        Log.info("Builded " + langs.size() + " languages.");
         return this;
     }
 
@@ -59,7 +63,7 @@ public class ChatHandler {
                 return doc;
             }
         }
-        return getMessagesDoc("en");
+        return null;
     }
 
     public Set<ChatLang> getLangs() {
@@ -71,7 +75,7 @@ public class ChatHandler {
         for (ChatLang lang : getLangs()) {
             if (locale.equals(lang.getLocale())) return lang;
         }
-        return getLang("en");
+        return null;
     }
 
 }

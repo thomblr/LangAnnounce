@@ -1,0 +1,5 @@
+settings:
+    enabled: true
+    random: false
+    prefix: "[LangAnnounce]"
+    interval: 120
