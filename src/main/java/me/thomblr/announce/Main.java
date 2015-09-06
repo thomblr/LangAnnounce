@@ -1,7 +1,15 @@
 package me.thomblr.announce;
 
+import com.sk89q.bukkit.util.CommandsManagerRegistration;
+import com.sk89q.minecraft.util.commands.*;
+import me.thomblr.announce.command.AnnounceCommand;
 import me.thomblr.announce.message.ChatHandler;
+import me.thomblr.announce.util.ChatUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,6 +21,7 @@ public class Main extends JavaPlugin implements Listener {
 
     private static Main instance;
     private ChatHandler chatHandler;
+    private CommandsManager<CommandSender> commands;
 
     private boolean announcerEnabled;
     private boolean announcerRandom;
@@ -35,6 +44,7 @@ public class Main extends JavaPlugin implements Listener {
         saveConfig();
 
         registerSettings();
+        setupCommands();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new ChatThread(), getAnnouncerInterval() * 20L, getAnnouncerInterval() * 20L);
     }
@@ -76,6 +86,43 @@ public class Main extends JavaPlugin implements Listener {
             this.announcerPrefix = config.getString("settings.prefix", "[LangAnnounce]");
             this.announcerInterval = config.getInt("settings.interval", 120);
         }
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        String locale = ChatUtil.getLocale(sender);
+        try {
+            this.commands.execute(cmd.getName(), args, sender, sender);
+        } catch (CommandPermissionsException e) {
+            sender.sendMessage(ChatColor.RED + "You don't have permission.");
+        } catch (MissingNestedCommandException e) {
+            sender.sendMessage(ChatColor.RED + e.getUsage().replace("{cmd}", cmd.getName()));
+        } catch (CommandUsageException e) {
+            sender.sendMessage(ChatColor.RED + e.getMessage());
+            sender.sendMessage(ChatColor.RED + e.getUsage());
+        } catch (WrappedCommandException e) {
+            if (e.getCause() instanceof NumberFormatException) {
+                sender.sendMessage(ChatColor.RED + "Number expected, string received instead.");
+            } else {
+                sender.sendMessage(ChatColor.RED + "An unknown error has occurred. Please refer to the server console.");
+                e.printStackTrace();
+            }
+        } catch (CommandException e) {
+            sender.sendMessage(ChatColor.RED + e.getMessage());
+        }
+        return true;
+    }
+
+    private void setupCommands() {
+        this.commands = new CommandsManager<CommandSender>() {
+            @Override
+            public boolean hasPermission(CommandSender sender, String perm) {
+                return sender instanceof ConsoleCommandSender || sender.hasPermission(perm);
+            }
+        };
+        CommandsManagerRegistration cmdRegister = new CommandsManagerRegistration(this, this.commands);
+        cmdRegister.register(AnnounceCommand.AnnounceParentCommand.class);
+        cmdRegister.register(AnnounceCommand.class);
     }
 
 }
