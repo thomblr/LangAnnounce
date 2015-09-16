@@ -3,3 +3,4 @@ settings:
     random: false
     prefix: "[LangAnnounce]"
     interval: 120
+    default: "en"

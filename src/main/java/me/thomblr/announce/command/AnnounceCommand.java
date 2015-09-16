@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 
 public class AnnounceCommand {
 
-    @Command(aliases = { "list" }, desc = "List all the localized messages")
+    @Command(aliases = { "list" }, desc = "List all the localized messages", flags = "a")
     @CommandPermissions({ "announce.list", "announce.*" })
     public static void list(CommandContext cmd, CommandSender sender) throws CommandException {
 

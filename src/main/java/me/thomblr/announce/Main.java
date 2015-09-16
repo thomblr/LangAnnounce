@@ -4,6 +4,7 @@ import com.sk89q.bukkit.util.CommandsManagerRegistration;
 import com.sk89q.minecraft.util.commands.*;
 import me.thomblr.announce.command.AnnounceCommand;
 import me.thomblr.announce.message.ChatHandler;
+import me.thomblr.announce.message.ChatLang;
 import me.thomblr.announce.util.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,24 +28,24 @@ public class Main extends JavaPlugin implements Listener {
     private boolean announcerRandom;
     private String announcerPrefix;
     private int announcerInterval;
+    private ChatLang defolt;
 
     @Override
     public void onEnable() {
         instance = this;
         getDataFolder().mkdir();
 
-        FileConfiguration config = getConfig();
-        config.options().copyDefaults(true);
-        saveConfig();
-
-        registerSettings();
-        setupCommands();
-
         try {
             chatHandler = new ChatHandler().buildMessages();
         } catch(JDOMException | IOException e) {
             e.printStackTrace();
         }
+
+        FileConfiguration config = getConfig();
+        config.options().copyDefaults(true);
+        saveConfig();
+        setupCommands();
+        registerSettings();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new ChatThread(), getAnnouncerInterval() * 20L, getAnnouncerInterval() * 20L);
     }
@@ -78,6 +79,10 @@ public class Main extends JavaPlugin implements Listener {
         return announcerInterval;
     }
 
+    public ChatLang getDefaultLang() {
+        return defolt;
+    }
+
     private void registerSettings() {
         FileConfiguration config = getConfig();
         if (config.contains("settings")) {
@@ -85,6 +90,7 @@ public class Main extends JavaPlugin implements Listener {
             this.announcerRandom = config.getBoolean("settings.random", false);
             this.announcerPrefix = config.getString("settings.prefix", "[LangAnnounce]");
             this.announcerInterval = config.getInt("settings.interval", 120);
+            this.defolt = getChatHandler().getLang(config.getString("settings.default", "en"));
         }
     }
 

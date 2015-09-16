@@ -78,7 +78,7 @@ public class ChatHandler {
         for (ChatLang lang : getLangs()) {
             if (locale.equals(lang.getLocale())) return lang;
         }
-        return null;
+        return Main.get().getDefaultLang();
     }
 
 }
