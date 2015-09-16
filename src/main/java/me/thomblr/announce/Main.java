@@ -33,18 +33,18 @@ public class Main extends JavaPlugin implements Listener {
         instance = this;
         getDataFolder().mkdir();
 
-        try {
-            chatHandler = new ChatHandler().buildMessages();
-        } catch(JDOMException | IOException e) {
-            e.printStackTrace();
-        }
-
         FileConfiguration config = getConfig();
         config.options().copyDefaults(true);
         saveConfig();
 
         registerSettings();
         setupCommands();
+
+        try {
+            chatHandler = new ChatHandler().buildMessages();
+        } catch(JDOMException | IOException e) {
+            e.printStackTrace();
+        }
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new ChatThread(), getAnnouncerInterval() * 20L, getAnnouncerInterval() * 20L);
     }

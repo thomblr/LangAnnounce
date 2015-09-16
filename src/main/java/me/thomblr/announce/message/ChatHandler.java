@@ -31,8 +31,16 @@ public class ChatHandler {
             messages.mkdir();
         }
 
-        FileUtils.copyInputStreamToFile(Main.get().getResource("en.xml"), new File(Main.get().getDataFolder(), "en.xml"));
-        FileUtils.copyInputStreamToFile(Main.get().getResource("fr.xml"), new File(Main.get().getDataFolder(), "fr.xml"));
+        File[] files = { new File(Main.get().getDataFolder(), "messages/en.xml"), new File(Main.get().getDataFolder(), "messages/fr.xml") };
+        for (File file : files) {
+            if (!file.exists()) {
+                try {
+                    FileUtils.copyInputStreamToFile(Main.get().getResource(file.getName()), file);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         for (File file : messages.listFiles()) {
             if (file.getName().endsWith(".xml")) {
