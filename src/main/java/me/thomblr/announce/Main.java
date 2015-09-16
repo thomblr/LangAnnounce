@@ -47,7 +47,9 @@ public class Main extends JavaPlugin implements Listener {
         setupCommands();
         registerSettings();
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new ChatThread(), getAnnouncerInterval() * 20L, getAnnouncerInterval() * 20L);
+        for (ChatLang lang : getChatHandler().getLangs()) {
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, lang, getAnnouncerInterval() * 20L, getAnnouncerInterval() * 20L);
+        }
     }
 
     @Override
