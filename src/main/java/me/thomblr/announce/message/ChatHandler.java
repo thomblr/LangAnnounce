@@ -31,11 +31,11 @@ public class ChatHandler {
             messages.mkdir();
         }
 
-        File[] files = { new File(Main.get().getDataFolder(), "messages/en.xml"), new File(Main.get().getDataFolder(), "messages/fr.xml") };
+        File[] files = { new File(messages, "en.xml"), new File(messages, "fr.xml") };
         for (File file : files) {
             if (!file.exists()) {
                 try {
-                    FileUtils.copyInputStreamToFile(Main.get().getResource(file.getName()), file);
+                    FileUtils.copyInputStreamToFile(Main.get().getResource("messages/" + file.getName()), file);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
