@@ -36,7 +36,7 @@ public class AnnounceCommand {
     }
 
     public static class AnnounceParentCommand {
-        @Command(aliases = { "announce", "ann" }, desc = "Manage the localized announcements.")
+        @Command(aliases = { "announce", "ann" }, desc = "Manage the localized announcements.", min = 1)
         @NestedCommand({AnnounceCommand.class})
         public static void announce(final CommandContext cmd, CommandSender sender) throws CommandException { }
     }

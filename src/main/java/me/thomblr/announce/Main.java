@@ -122,7 +122,6 @@ public class Main extends JavaPlugin implements Listener {
         };
         CommandsManagerRegistration cmdRegister = new CommandsManagerRegistration(this, this.commands);
         cmdRegister.register(AnnounceCommand.AnnounceParentCommand.class);
-        cmdRegister.register(AnnounceCommand.class);
     }
 
 }

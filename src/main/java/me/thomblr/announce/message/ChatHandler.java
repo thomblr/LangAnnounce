@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import me.thomblr.announce.Main;
 import me.thomblr.announce.util.Log;
+import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -29,6 +30,9 @@ public class ChatHandler {
         if (!messages.exists()) {
             messages.mkdir();
         }
+
+        FileUtils.copyInputStreamToFile(Main.get().getResource("en.xml"), new File(Main.get().getDataFolder(), "en.xml"));
+        FileUtils.copyInputStreamToFile(Main.get().getResource("fr.xml"), new File(Main.get().getDataFolder(), "fr.xml"));
 
         for (File file : messages.listFiles()) {
             if (file.getName().endsWith(".xml")) {

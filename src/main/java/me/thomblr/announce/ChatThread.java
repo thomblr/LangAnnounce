@@ -1,5 +1,6 @@
 package me.thomblr.announce;
 
+import me.thomblr.announce.message.ChatLang;
 import me.thomblr.announce.util.ChatUtil;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -17,15 +18,20 @@ public class ChatThread extends Thread {
     public void run() {
         if (Main.get().isAnnouncerEnabled()) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                int size = Main.get().getChatHandler().getLang(p.getLocale()).getMessages().size();
-                if (Main.get().isAnnouncerRandom()) {
-                    p.sendMessage(buildMessage(Main.get().getChatHandler().getLang(p.getLocale()).getRandomMessage()));
-                } else {
-                    if (++lastAnnounceIndex >= size) {
-                        lastAnnounceIndex = 0;
-                    }
-                    if (lastAnnounceIndex < size) {
-                        p.sendMessage(buildMessage(Main.get().getChatHandler().getLang(p.getLocale()).getMessages().get(lastAnnounceIndex)));
+                ChatLang lang = Main.get().getChatHandler().getLang(p.getLocale());
+                if (lang != null) {
+                    int size = Main.get().getChatHandler().getLang(p.getLocale()).getMessages().size();
+                    if (size > 0) {
+                        if (Main.get().isAnnouncerRandom()) {
+                            p.sendMessage(buildMessage(Main.get().getChatHandler().getLang(p.getLocale()).getRandomMessage()));
+                        } else {
+                            if (++lastAnnounceIndex >= size) {
+                                lastAnnounceIndex = 0;
+                            }
+                            if (lastAnnounceIndex < size) {
+                                p.sendMessage(buildMessage(Main.get().getChatHandler().getLang(p.getLocale()).getMessages().get(lastAnnounceIndex)));
+                            }
+                        }
                     }
                 }
             }
