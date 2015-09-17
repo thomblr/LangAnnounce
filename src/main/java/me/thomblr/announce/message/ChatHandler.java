@@ -55,13 +55,9 @@ public class ChatHandler {
             String locale = root.getAttributeValue("lang");
             List<String> messages = Lists.newArrayList();
             for (Element child : root.getChildren("message")) {
-                if (child.getAttributeValue("value") != null) {
-                    messages.add(child.getAttributeValue("value"));
-                } else {
-                    messages.add(child.getText());
-                }
+                messages.add(child.getText());
             }
-            ChatLang lang = new ChatLang(locale, messages);
+            ChatLang lang = new ChatLang(document, locale, messages);
             langs.add(lang);
             Log.info("Added " + lang.getLocale() + " with " + lang.getMessages().size() + " messages.");
         }
@@ -74,7 +70,7 @@ public class ChatHandler {
     }
 
     public ChatLang getLang(String locale) {
-        locale = locale.split("_")[0];
+        if (locale.contains("_")) locale = locale.split("_")[0];
         for (ChatLang lang : getLangs()) {
             if (locale.equals(lang.getLocale())) return lang;
         }

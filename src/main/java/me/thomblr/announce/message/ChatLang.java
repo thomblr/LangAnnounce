@@ -7,19 +7,26 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jdom2.Document;
 
 import java.util.List;
 
 public class ChatLang extends Thread {
 
+    private Document document;
     private String locale;
     private List<String> messages;
     private int lastMessageIndex;
 
-    public ChatLang(String locale, List<String> messages) {
+    public ChatLang(Document document, String locale, List<String> messages) {
+        this.document = document;
         this.locale = locale;
         this.messages = messages;
         this.lastMessageIndex = 0;
+    }
+
+    public Document getDocument() {
+        return document;
     }
 
     public String getLocale() {
@@ -50,13 +57,13 @@ public class ChatLang extends Thread {
                 if (lang != null && lang.equals(this)) {
                     if (getMessages().size() > 0) {
                         if (Main.get().isAnnouncerRandom()) {
-                            p.sendMessage(buildMessage(lang.getRandomMessage()));
+                            p.sendMessage(buildMessage(lang.getRandomMessage(), true));
                         } else {
                             if (getLastMessageIndex() >= getMessages().size()) {
                                 lang.setLastMessageIndex(0);
                             }
                             if (getLastMessageIndex() < getMessages().size()) {
-                                p.sendMessage(buildMessage(lang.getMessages().get(getLastMessageIndex())));
+                                p.sendMessage(buildMessage(lang.getMessages().get(getLastMessageIndex()), true));
                             }
                         }
                     }
@@ -67,10 +74,13 @@ public class ChatLang extends Thread {
         }
     }
 
-    public BaseComponent buildMessage(String message) {
-        BaseComponent prefix = new TextComponent(ChatUtil.convertChatColor(Main.get().getAnnouncerPrefix()));
-        prefix.addExtra(" ");
-        prefix.addExtra(new TextComponent(ChatUtil.convertChatColor(message)));
-        return prefix;
+    public BaseComponent buildMessage(String message, boolean prefix) {
+        BaseComponent msg = new TextComponent();
+        if (prefix) {
+            msg.addExtra(new TextComponent(ChatUtil.convertChatColor(Main.get().getAnnouncerPrefix())));
+            msg.addExtra(" ");
+        }
+        msg.addExtra(new TextComponent(ChatUtil.convertChatColor(message)));
+        return msg;
     }
 }
